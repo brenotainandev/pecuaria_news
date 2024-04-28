@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pecuaria_news/main_page.dart';
+import 'package:pecuaria_news/core/main_page.dart';
 import 'package:pecuaria_news/theme/app_colors.dart';
 
 class App extends StatelessWidget {
