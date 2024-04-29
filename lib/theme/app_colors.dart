@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color azureRadiance = Color(0xFF0B86E7);
-  static const Color white = Color(0xFFFFFFFF);
-  static const Color osloGrey = Color(0xFF949A9A);
 
+  static const Color white = Color(0xFFFFFFFF);
+
+  static const Color osloGrey = Color(0xFF949A9A);
+  static const Color athenasGrey = Color(0xFFF6F5F8);
   static const MaterialColor azureRadianceSwtch = MaterialColor(
     0xFF0B86E7,
     _azureRadianceMap,
