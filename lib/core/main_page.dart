@@ -13,10 +13,31 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  late final PageController _pageController;
+  int _pageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _pageIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _pageIndex = index;
+          });
+        },
         children: const [
           HomePage(),
           BrowsePage(),
@@ -24,7 +45,13 @@ class _MainPageState extends State<MainPage> {
           ProfilePage(),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(
+          currentIndex: _pageIndex,
+          onTap: (index) {
+            setState(() {
+              _pageController.jumpToPage(index);
+            });
+          }),
     );
   }
 }
