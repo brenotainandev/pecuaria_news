@@ -4,7 +4,7 @@ const newsrItems = [
     'category': 'Sports',
     'author': 'Breno Tainan',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
-    'date': '24-03-2024',
+    'date': '2024-03-24',
     'title': 'The best football player in the world',
     'content':
         '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien
@@ -18,7 +18,7 @@ const newsrItems = [
     'category': 'Technology',
     'author': 'Breno Tainan',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
-    'date': '24-03-2024',
+    'date': '2024-03-24',
     'title': 'The best technology in the world',
     'content':
         '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien
@@ -32,7 +32,7 @@ const newsrItems = [
     'category': 'Science',
     'author': 'Breno Tainan',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
-    'date': '24-03-2024',
+    'date': '2024-03-24',
     'title': 'The best science in the world',
     'content':
         '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien
@@ -46,7 +46,7 @@ const newsrItems = [
     'category': 'Sports',
     'author': 'Breno Tainan',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
-    'date': '24-03-2024',
+    'date': '2024-03-24',
     'title': 'The best football player in the world',
     'content':
         '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien

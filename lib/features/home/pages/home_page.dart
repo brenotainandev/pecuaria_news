@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pecuaria_news/features/home/widgets/home_heading.dart';
+import 'package:pecuaria_news/features/home/widgets/home_slider.dart';
 import 'package:pecuaria_news/features/home/widgets/home_top_buttons.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,9 +14,13 @@ class HomePage extends StatelessWidget {
           children: [
             const HomeTopButtons(),
             HomeHeading(
-                title: 'Novas Noticias',
-                trailing: TextButton(
-                    onPressed: () {}, child: const Text('Ver tudo'))),
+              title: 'Últimas notícias',
+              trailing: TextButton(
+                onPressed: () {},
+                child: const Text('Ver mais'),
+              ),
+            ),
+            const HomeSlide(),
             const Center(
               child: Text('Home'),
             ),
