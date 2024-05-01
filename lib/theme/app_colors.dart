@@ -11,6 +11,7 @@ class AppColors {
 
   static const Color osloGrey = Color(0xFF949A9A);
   static const Color athenasGrey = Color(0xFFF6F5F8);
+  static const Color porcelain = Color(0xFFECEEF0);
 
   static const MaterialColor azureRadianceSwtch = MaterialColor(
     0xFF0B86E7,

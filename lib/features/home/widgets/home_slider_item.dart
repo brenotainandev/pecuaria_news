@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pecuaria_news/core/utils/app_date_formattedrs.dart';
 import 'package:pecuaria_news/theme/app_colors.dart';
 
@@ -33,9 +32,6 @@ class HomeSliderItem extends StatelessWidget {
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              Container(
-                color: Colors.red,
-              ),
               Image.asset(
                 imageAssetPath,
                 fit: BoxFit.cover,
