@@ -2,7 +2,7 @@ const newsrItems = [
   {
     'imageAssetPath': 'assets/images/raster/news_1.jpeg',
     'category': 'Sports',
-    'author': 'Breno Tainan',
+    'author': 'Breno',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
     'date': '2024-03-24',
     'title': 'The best football player in the world',
@@ -16,7 +16,7 @@ const newsrItems = [
   {
     'imageAssetPath': 'assets/images/raster/news_2.jpeg',
     'category': 'Technology',
-    'author': 'Breno Tainan',
+    'author': 'Breno',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
     'date': '2024-03-24',
     'title': 'The best technology in the world',
@@ -30,7 +30,7 @@ const newsrItems = [
   {
     'imageAssetPath': 'assets/images/raster/news_3.jpeg',
     'category': 'Science',
-    'author': 'Breno Tainan',
+    'author': 'Breno',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
     'date': '2024-03-24',
     'title': 'The best science in the world',
@@ -44,7 +44,7 @@ const newsrItems = [
   {
     'imageAssetPath': 'assets/images/raster/news_4.jpeg',
     'category': 'Sports',
-    'author': 'Breno Tainan',
+    'author': 'Breno',
     'authorImageAssetPath': 'assets/images/raster/author_1.jpeg',
     'date': '2024-03-24',
     'title': 'The best football player in the world',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pecuaria_news/features/home/widgets/home_heading.dart';
 import 'package:pecuaria_news/features/home/widgets/home_slider.dart';
 import 'package:pecuaria_news/features/home/widgets/home_top_buttons.dart';
+import 'package:pecuaria_news/features/home/widgets/news_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -28,6 +29,7 @@ class HomePage extends StatelessWidget {
                 child: const Text('Ver mais'),
               ),
             ),
+            const NewsList(),
           ],
         ),
       ),
