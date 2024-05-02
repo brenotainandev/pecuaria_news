@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pecuaria_news/dummy.dart';
@@ -59,56 +60,60 @@ class _HomeSlideState extends State<HomeSlide> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 235,
-          child: PageView.builder(
-            onPageChanged: (index) {
-              setState(() {
-                _pageIndex = index % newsrItems.length;
-              });
-              _scrollController.animateTo(
-                _calculateIndicatorOffset(),
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeIn,
-              );
-            },
-            controller: _pageController,
-            itemBuilder: (context, index) {
-              final i = index % newsrItems.length;
-              return HomeSliderItem(
-                isActived: _pageIndex == i,
-                imageAssetPath: newsrItems[i]['imageAssetPath']!,
-                category: newsrItems[i]['category']!,
-                title: newsrItems[i]['title']!,
-                author: newsrItems[i]['author']!,
-                date: DateTime.parse(newsrItems[i]['date']!),
-              );
-            },
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          SizedBox(
+            height: 235,
+            child: PageView.builder(
+              onPageChanged: (index) {
+                setState(() {
+                  _pageIndex = index % newsrItems.length;
+                });
+                _scrollController.animateTo(
+                  _calculateIndicatorOffset(),
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                );
+              },
+              controller: _pageController,
+              itemBuilder: (context, index) {
+                final i = index % newsrItems.length;
+                return HomeSliderItem(
+                  isActived: _pageIndex == i,
+                  imageAssetPath: newsrItems[i]['imageAssetPath']!,
+                  category: newsrItems[i]['category']!,
+                  title: newsrItems[i]['title']!,
+                  author: newsrItems[i]['author']!,
+                  date: DateTime.parse(newsrItems[i]['date']!),
+                );
+              },
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: _indicatorsVisibleWidth,
-          height: _indicatorWidth,
-          child: ListView.builder(
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final i = index % newsrItems.length;
-              return HomeSliderIndicatorItem(
-                isActived: index == _pageIndex + 999,
-                activedWidth: _activedIndicatorWidth,
-                width: _indicatorWidth,
-                margin: _indicatorMargin,
-              );
-            },
+          const SizedBox(
+            height: 10,
           ),
-        ),
-      ],
+          Align(
+            child: SizedBox(
+              width: _indicatorsVisibleWidth,
+              height: _indicatorWidth,
+              child: ListView.builder(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final i = index % newsrItems.length;
+                  return HomeSliderIndicatorItem(
+                    isActived: index == _pageIndex + 999,
+                    activedWidth: _activedIndicatorWidth,
+                    width: _indicatorWidth,
+                    margin: _indicatorMargin,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
