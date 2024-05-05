@@ -38,6 +38,7 @@ class SingeNewsItemPage extends StatelessWidget {
               date: date,
               minExtent: topPading + 56,
               maxExtent: maxScreenSizeHeight / 2,
+              topPadding: topPading,
             ),
           ),
           SliverToBoxAdapter(
