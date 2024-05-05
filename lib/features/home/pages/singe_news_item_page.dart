@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pecuaria_news/features/home/widgets/single_news_item_header_delagate.dart';
 import 'package:pecuaria_news/theme/app_colors.dart';
 
 class SingeNewsItemPage extends StatelessWidget {
@@ -23,10 +24,22 @@ class SingeNewsItemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topPading = MediaQuery.of(context).padding.top;
+    final maxScreenSizeHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.black,
       body: CustomScrollView(
         slivers: [
+          SliverPersistentHeader(
+            delegate: SingleNewsItemHeaderDelegate(
+              title: title,
+              category: category,
+              imageAssetPath: imageAssetPath,
+              date: date,
+              minExtent: topPading + 56,
+              maxExtent: maxScreenSizeHeight / 2,
+            ),
+          ),
           SliverToBoxAdapter(
             child: Container(
               padding: const EdgeInsets.all(20),
