@@ -65,7 +65,7 @@ class NewsListItem extends StatelessWidget {
                 children: [
                   Text(
                     category,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: AppColors.osloGrey,
                         ),
                   ),
@@ -74,7 +74,7 @@ class NewsListItem extends StatelessWidget {
                   ),
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(
                     height: 15,
@@ -92,7 +92,7 @@ class NewsListItem extends StatelessWidget {
                       ),
                       Text(
                         '$author · ${AppDateFormatters.mdY(date)}',
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: AppColors.osloGrey,
                             ),
                       ),

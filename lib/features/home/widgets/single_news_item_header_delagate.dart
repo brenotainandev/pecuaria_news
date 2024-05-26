@@ -122,9 +122,10 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                     width: MediaQuery.of(context).size.width - 40,
                     child: Text(
                       title,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: AppColors.white,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: AppColors.white,
+                              ),
                     ),
                   ),
                   AnimatedContainer(
@@ -136,10 +137,12 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                     child: showCategoryDate
                         ? Text(
                             AppDateFormatters.mdY(date),
-                            style:
-                                Theme.of(context).textTheme.subtitle1?.copyWith(
-                                      color: AppColors.white,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: AppColors.white,
+                                ),
                           )
                         : const SizedBox.shrink(),
                   ),
@@ -195,7 +198,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                             : CrossFadeState.showSecond,
                         secondChild: Text(
                           title,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.headlineSmall,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),

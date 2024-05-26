@@ -91,9 +91,10 @@ class HomeSliderItem extends StatelessWidget {
                     children: [
                       Text(
                         '$author · ${AppDateFormatters.mdY(date)}',
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                              color: AppColors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: AppColors.white,
+                                ),
                         maxLines: 1,
                       ),
                       const SizedBox(
@@ -101,10 +102,11 @@ class HomeSliderItem extends StatelessWidget {
                       ),
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ],
                   ),

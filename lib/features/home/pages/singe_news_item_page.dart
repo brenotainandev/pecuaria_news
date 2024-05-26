@@ -71,7 +71,7 @@ class _SingeNewsItemPageState extends State<SingeNewsItemPage> {
                 children: [
                   Text(
                     widget.author,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(
                     height: 30,

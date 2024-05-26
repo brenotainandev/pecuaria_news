@@ -12,7 +12,7 @@ class HomeHeading extends StatelessWidget {
       sliver: SliverToBoxAdapter(
         child: Row(
           children: [
-            Text(title, style: Theme.of(context).textTheme.headline6),
+            Text(title, style: Theme.of(context).textTheme.headlineSmall),
             const Spacer(),
             if (trailing != null) trailing!,
           ],
