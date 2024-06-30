@@ -10,6 +10,7 @@ class NewsList extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, i) => NewsListItem(
+          idNews: newsrItems[i]['idNews']!,
           imageAssetPath: newsrItems[i]['imageAssetPath']!,
           category: newsrItems[i]['category']!,
           title: newsrItems[i]['title']!,
