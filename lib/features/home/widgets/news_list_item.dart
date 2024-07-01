@@ -73,11 +73,11 @@ class NewsListItem extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(
                     height: 15,

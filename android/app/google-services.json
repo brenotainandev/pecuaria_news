@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "240742625578",
+    "project_id": "pecuaria-news-d5923",
+    "storage_bucket": "pecuaria-news-d5923.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240742625578:android:2085c4e17a59610b472e53",
+        "android_client_info": {
+          "package_name": "com.example.pecuaria_news"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240742625578-p3do3k9hcopbbrdrlrltq5it3pcmlvo9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzQ_NMXNDHUDNhat6zgeb8iIJWG789s08"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240742625578-p3do3k9hcopbbrdrlrltq5it3pcmlvo9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
