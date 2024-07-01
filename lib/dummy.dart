@@ -1,6 +1,5 @@
 const newsrItems = [
   {
-    'idNews': '1',
     'imageAssetPath': 'assets/images/raster/news_1.jpeg',
     'category': 'Sports',
     'author': 'Breno',
@@ -15,7 +14,6 @@ const newsrItems = [
         ''',
   },
   {
-    'idNews': '2',
     'imageAssetPath': 'assets/images/raster/news_2.jpeg',
     'category': 'Technology',
     'author': 'Breno',
@@ -35,7 +33,6 @@ const newsrItems = [
         ''',
   },
   {
-    'idNews': '3',
     'imageAssetPath': 'assets/images/raster/news_3.jpeg',
     'category': 'Science',
     'author': 'Breno',
@@ -50,7 +47,6 @@ const newsrItems = [
         ''',
   },
   {
-    'idNews': '4',
     'imageAssetPath': 'assets/images/raster/news_4.jpeg',
     'category': 'Sports',
     'author': 'Breno',
@@ -64,72 +60,4 @@ const newsrItems = [
         
         ''',
   },
-];
-
-const newsComments = [
-  {
-    'idNews': '1',
-    'comments': [
-      {
-        'commenter': 'Breno',
-        'date': '2024-04-01',
-        'content': 'Excelente artigo!'
-      },
-      {
-        'commenter': 'Maria',
-        'date': '2024-04-02',
-        'content': 'Concordo, muito interessante!'
-      },
-      {
-        'commenter': 'João',
-        'date': '2024-04-03',
-        'content': 'Adorei a análise do autor.'
-      }
-    ]
-  },
-  {
-    'idNews': '2',
-    'comments': [
-      {
-        'commenter': 'Breno',
-        'date': '2024-04-01',
-        'content': 'Tecnologia incrível!'
-      },
-      {
-        'commenter': 'Maria',
-        'date': '2024-04-02',
-        'content': 'Isso vai revolucionar a pecuária.'
-      }
-    ]
-  },
-  {
-    'idNews': '3',
-    'comments': [
-      {
-        'commenter': 'João',
-        'date': '2024-04-03',
-        'content': 'Ciência de ponta!'
-      }
-    ]
-  },
-  {
-    'idNews': '4',
-    'comments': [
-      {
-        'commenter': 'Breno',
-        'date': '2024-04-01',
-        'content': 'Jogador incrível!'
-      },
-      {
-        'commenter': 'Maria',
-        'date': '2024-04-02',
-        'content': 'Melhor do mundo, sem dúvida.'
-      },
-      {
-        'commenter': 'João',
-        'date': '2024-04-03',
-        'content': 'Concordo plenamente.'
-      }
-    ]
-  }
 ];

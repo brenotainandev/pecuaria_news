@@ -5,7 +5,6 @@ import 'package:pecuaria_news/theme/app_colors.dart';
 
 class HomeSliderItem extends StatelessWidget {
   final bool isActived;
-  final String idNews;
   final String imageAssetPath;
   final String category;
   final String title;
@@ -16,7 +15,6 @@ class HomeSliderItem extends StatelessWidget {
 
   const HomeSliderItem({
     super.key,
-    required this.idNews,
     required this.isActived,
     required this.imageAssetPath,
     required this.category,
@@ -35,7 +33,6 @@ class HomeSliderItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => SingeNewsItemPage(
-              idNews: idNews,
               title: title,
               content: content,
               author: author,

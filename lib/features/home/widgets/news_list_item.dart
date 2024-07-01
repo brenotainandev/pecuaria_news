@@ -4,7 +4,6 @@ import 'package:pecuaria_news/features/home/pages/singe_news_item_page.dart';
 import 'package:pecuaria_news/theme/app_colors.dart';
 
 class NewsListItem extends StatelessWidget {
-  final String idNews;
   final String title;
   final String content;
   final String author;
@@ -15,7 +14,6 @@ class NewsListItem extends StatelessWidget {
 
   const NewsListItem({
     super.key,
-    required this.idNews,
     required this.title,
     required this.content,
     required this.author,
@@ -33,7 +31,6 @@ class NewsListItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => SingeNewsItemPage(
-              idNews: idNews,
               title: title,
               content: content,
               author: author,

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pecuaria_news/features/home/widgets/comment_field.dart';
 import 'package:pecuaria_news/features/home/widgets/single_news_item_header_delagate.dart';
 import 'package:pecuaria_news/theme/app_colors.dart';
 
 class SingeNewsItemPage extends StatefulWidget {
-  final String idNews;
   final String title;
   final String content;
   final String author;
@@ -15,7 +13,6 @@ class SingeNewsItemPage extends StatefulWidget {
 
   const SingeNewsItemPage({
     super.key,
-    required this.idNews,
     required this.title,
     required this.content,
     required this.author,
@@ -80,8 +77,6 @@ class _SingeNewsItemPageState extends State<SingeNewsItemPage> {
                     height: 30,
                   ),
                   Text(widget.content),
-                  const SizedBox(height: 32.0),
-                  CommentField(idNews: widget.idNews),
                 ],
               ),
             ),
