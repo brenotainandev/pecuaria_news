@@ -14,25 +14,33 @@ class LoginState with ChangeNotifier {
 
   CurrentUser? get currentUser => _currentUser;
 
+  // Verifica o estado atual do usuário no FirebaseAuth
   void _checkCurrentUser() {
     _firebaseAuth.authStateChanges().listen((User? user) {
-      if (user == null) {
-        _currentUser = null;
-      } else {
-        _currentUser = CurrentUser(
-          uid: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-          photoUrl: user.photoURL,
-        );
-      }
-      notifyListeners();
+      _updateCurrentUser(user);
     });
   }
 
+  // Atualiza o _currentUser com base no User do FirebaseAuth
+  void _updateCurrentUser(User? user) {
+    if (user == null) {
+      _currentUser = null;
+    } else {
+      _currentUser = CurrentUser(
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoUrl: user.photoURL,
+      );
+    }
+    notifyListeners();
+  }
+
+  // Define o usuário atual com base na conta do GoogleSignIn
   void setCurrentUser(GoogleSignInAccount? account) async {
     if (account == null) {
       _currentUser = null;
+      notifyListeners();
     } else {
       final GoogleSignInAuthentication googleAuth =
           await account.authentication;
@@ -44,37 +52,38 @@ class LoginState with ChangeNotifier {
       try {
         final UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(credential);
-        final User? user = userCredential.user;
-
-        if (user != null) {
-          _currentUser = CurrentUser(
-            uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-            photoUrl: user.photoURL,
-          );
-          notifyListeners();
-        }
+        _updateCurrentUser(userCredential.user);
       } catch (e) {
         print("Erro ao vincular a conta do Google ao usuário do Firebase: $e");
+        // Considerar notificar os ouvintes mesmo em caso de erro para refletir qualquer mudança de estado
+        notifyListeners();
       }
     }
   }
 
+  // Inicia o processo de login com o Google
   Future<void> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       setCurrentUser(googleUser);
     } catch (e) {
       print("Erro ao fazer login com o Google: $e");
+      notifyListeners(); // Notificar em caso de falha para permitir que a UI reaja adequadamente
     }
   }
 
+  // Realiza o logout do usuário
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
-    await _firebaseAuth.signOut();
-    _currentUser = null;
-    notifyListeners();
+    try {
+      await _googleSignIn.signOut();
+      await _firebaseAuth.signOut();
+      _currentUser = null;
+      notifyListeners();
+    } catch (e) {
+      print("Erro ao tentar sair: $e");
+      // Mesmo em caso de erro, considerar a necessidade de atualizar a UI
+      notifyListeners();
+    }
   }
 }
 
