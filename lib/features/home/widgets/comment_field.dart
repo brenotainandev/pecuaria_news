@@ -19,12 +19,13 @@ class CommentFieldState extends State<CommentField> {
 
   void _submitComment() {
     // Acessar o nome do usuário
-    final userName =
-        Provider.of<LoginState>(context, listen: false).currentUser?.userName;
+    final userName = Provider.of<LoginState>(context, listen: false)
+        .currentUser
+        ?.displayName;
 
 // Acessar o ID do usuário
     final userId =
-        Provider.of<LoginState>(context, listen: false).currentUser?.userId;
+        Provider.of<LoginState>(context, listen: false).currentUser?.uid;
     final commenterName =
         userName ?? 'Anonymous'; // Usa o nome do usuário se fornecido
     if (_commentController.text.isNotEmpty) {

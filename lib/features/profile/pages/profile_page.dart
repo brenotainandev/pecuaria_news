@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Olá, ${currentUser?.userName ?? 'Usuário'}!',
+          'Olá, ${currentUser?.displayName ?? 'Usuário'}!',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 24.0,
