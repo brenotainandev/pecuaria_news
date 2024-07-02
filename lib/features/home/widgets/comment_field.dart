@@ -44,8 +44,7 @@ class CommentFieldState extends State<CommentField> {
   Widget build(BuildContext context) {
     // Acessar o estado de login
     final loginState = Provider.of<LoginState>(context);
-    final isLoggedIn = loginState.currentUser !=
-        null; // ou use loginState.userId para verificar se está logado
+    final isLoggedIn = loginState.currentUser != null;
 
     List<Map<String, String>> filteredComments = [];
 
@@ -63,15 +62,30 @@ class CommentFieldState extends State<CommentField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (isLoggedIn) // Mostrar o campo de comentário somente se o usuário estiver logado
-          TextField(
-            controller: _commentController,
-            decoration: InputDecoration(
-              hintText: 'Adicione um comentário...',
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: _submitComment,
+        if (isLoggedIn)
+          Container(
+            margin: const EdgeInsets.only(bottom: 16.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: TextField(
+              controller: _commentController,
+              decoration: InputDecoration(
+                hintText: 'Adicione um comentário...',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: _submitComment,
+                ),
+                border: InputBorder
+                    .none, // Adicione esta linha para remover a borda
+                alignLabelWithHint:
+                    true, // Isso ajuda a centralizar o hint quando o campo está vazio
+                contentPadding: const EdgeInsets.fromLTRB(
+                    12, 12, 12, 12), // Ajuste conforme necessário
               ),
+              textAlignVertical:
+                  TextAlignVertical.center, // Centraliza o texto verticalmente
             ),
           )
         else
@@ -85,26 +99,28 @@ class CommentFieldState extends State<CommentField> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Comentários:',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text('Comentários:',
+                  style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
               ...filteredComments.map((comment) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Text(
-                    '${comment['commenter']} (${comment['date']}): ${comment['content']}',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0),
+                  elevation: 2.0,
+                  child: ListTile(
+                    leading: const Icon(Icons.account_circle, size: 40.0),
+                    title: Text('${comment['commenter']} (${comment['date']})'),
+                    subtitle: Text('${comment['content']}'),
                   ),
                 );
               }).toList(),
               ..._comments.map((comment) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Text(
-                    '${comment['commenter']} (${comment['date']}): ${comment['content']}',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0),
+                  elevation: 2.0,
+                  child: ListTile(
+                    leading: const Icon(Icons.account_circle, size: 40.0),
+                    title: Text('${comment['commenter']} (${comment['date']})'),
+                    subtitle: Text('${comment['content']}'),
                   ),
                 );
               }).toList(),

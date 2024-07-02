@@ -74,19 +74,22 @@ const newsComments = [
         'idUser': '1',
         'commenter': 'Breno',
         'date': '2024-04-01',
-        'content': 'Excelente artigo!'
+        'content': 'Excelente artigo!',
+        'photoUrl': '',
       },
       {
         'idUser': '2',
         'commenter': 'Maria',
         'date': '2024-04-02',
-        'content': 'Concordo, muito interessante!'
+        'content': 'Concordo, muito interessante!',
+        'photoUrl': '',
       },
       {
         'idUser': '3',
         'commenter': 'João',
         'date': '2024-04-03',
-        'content': 'Adorei a análise do autor.'
+        'content': 'Adorei a análise do autor.',
+        'photoUrl': '',
       }
     ]
   },
@@ -97,13 +100,15 @@ const newsComments = [
         'idUser': '1',
         'commenter': 'Breno',
         'date': '2024-04-01',
-        'content': 'Tecnologia incrível!'
+        'content': 'Tecnologia incrível!',
+        'photoUrl': '',
       },
       {
         'idUser': '1',
         'commenter': 'Maria',
         'date': '2024-04-02',
-        'content': 'Isso vai revolucionar a pecuária.'
+        'content': 'Isso vai revolucionar a pecuária.',
+        'photoUrl': '',
       }
     ]
   },
@@ -114,7 +119,8 @@ const newsComments = [
         'idUser': '1',
         'commenter': 'João',
         'date': '2024-04-03',
-        'content': 'Ciência de ponta!'
+        'content': 'Ciência de ponta!',
+        'photoUrl': '',
       }
     ]
   },
@@ -125,19 +131,22 @@ const newsComments = [
         'idUser': '1',
         'commenter': 'Breno',
         'date': '2024-04-01',
-        'content': 'Jogador incrível!'
+        'content': 'Jogador incrível!',
+        'photoUrl': '',
       },
       {
         'idUser': '1',
         'commenter': 'Maria',
         'date': '2024-04-02',
-        'content': 'Melhor do mundo, sem dúvida.'
+        'content': 'Melhor do mundo, sem dúvida.',
+        'photoUrl': '',
       },
       {
         'idUser': '1',
         'commenter': 'João',
         'date': '2024-04-03',
-        'content': 'Concordo plenamente.'
+        'content': 'Concordo plenamente.',
+        'photoUrl': '',
       }
     ]
   }
