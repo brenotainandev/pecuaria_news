@@ -71,16 +71,19 @@ const newsComments = [
     'idNews': '1',
     'comments': [
       {
+        'idUser': '1',
         'commenter': 'Breno',
         'date': '2024-04-01',
         'content': 'Excelente artigo!'
       },
       {
+        'idUser': '2',
         'commenter': 'Maria',
         'date': '2024-04-02',
         'content': 'Concordo, muito interessante!'
       },
       {
+        'idUser': '3',
         'commenter': 'João',
         'date': '2024-04-03',
         'content': 'Adorei a análise do autor.'
@@ -91,11 +94,13 @@ const newsComments = [
     'idNews': '2',
     'comments': [
       {
+        'idUser': '1',
         'commenter': 'Breno',
         'date': '2024-04-01',
         'content': 'Tecnologia incrível!'
       },
       {
+        'idUser': '1',
         'commenter': 'Maria',
         'date': '2024-04-02',
         'content': 'Isso vai revolucionar a pecuária.'
@@ -106,6 +111,7 @@ const newsComments = [
     'idNews': '3',
     'comments': [
       {
+        'idUser': '1',
         'commenter': 'João',
         'date': '2024-04-03',
         'content': 'Ciência de ponta!'
@@ -116,16 +122,19 @@ const newsComments = [
     'idNews': '4',
     'comments': [
       {
+        'idUser': '1',
         'commenter': 'Breno',
         'date': '2024-04-01',
         'content': 'Jogador incrível!'
       },
       {
+        'idUser': '1',
         'commenter': 'Maria',
         'date': '2024-04-02',
         'content': 'Melhor do mundo, sem dúvida.'
       },
       {
+        'idUser': '1',
         'commenter': 'João',
         'date': '2024-04-03',
         'content': 'Concordo plenamente.'

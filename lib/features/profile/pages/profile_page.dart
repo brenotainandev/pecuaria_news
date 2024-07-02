@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pecuaria_news/features/home/widgets/login_state.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,22 +13,26 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  GoogleSignInAccount? _currentUser;
 
   @override
   void initState() {
     super.initState();
     _googleSignIn.onCurrentUserChanged.listen((account) {
       setState(() {
-        _currentUser = account;
+        Provider.of<LoginState>(context, listen: false).setCurrentUser(account);
       });
     });
-    _googleSignIn.signInSilently();
+    _googleSignIn.signInSilently().then((_) {
+      if (!mounted) return;
+      setState(() {});
+    });
   }
 
   Future<void> _handleGoogleSignIn() async {
     try {
-      await _googleSignIn.signIn();
+      await _googleSignIn.signIn().then((account) {
+        Provider.of<LoginState>(context, listen: false).setCurrentUser(account);
+      });
     } catch (error) {
       if (kDebugMode) {
         print('Erro no login do Google: $error');
@@ -35,11 +41,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _handleGoogleSignOut() async {
-    _googleSignIn.disconnect();
+    await _googleSignIn.disconnect().then((_) {
+      Provider.of<LoginState>(context, listen: false).setCurrentUser(null);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Acessa o estado do login atual através do Provider
+    final currentUser = Provider.of<LoginState>(context).currentUser;
+
     Widget loginSection = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -74,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Olá, ${_currentUser?.displayName ?? 'Usuário'}!',
+          'Olá, ${currentUser?.userName ?? 'Usuário'}!',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 24.0,
@@ -101,6 +112,12 @@ class _ProfilePageState extends State<ProfilePage> {
       ],
     );
 
+    // Aqui você deve ajustar a lógica para verificar se o usuário está logado
+    // Isso pode depender de como você implementou o estado do login no seu Provider
+    bool isUserLoggedIn = currentUser != null;
+
+    Widget content = !isUserLoggedIn ? loginSection : profileSection;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -115,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         child: Center(
-          child: _currentUser == null ? loginSection : profileSection,
+          child: content,
         ),
       ),
     );
