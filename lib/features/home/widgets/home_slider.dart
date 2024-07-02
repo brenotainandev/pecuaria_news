@@ -82,6 +82,7 @@ class _HomeSlideState extends State<HomeSlide> {
                 return HomeSliderItem(
                   isActived: _pageIndex == i,
                   imageAssetPath: newsrItems[i]['imageAssetPath']!,
+                  idNews: newsrItems[i]['idNews']!,
                   category: newsrItems[i]['category']!,
                   title: newsrItems[i]['title']!,
                   content: newsrItems[i]['content']!,
