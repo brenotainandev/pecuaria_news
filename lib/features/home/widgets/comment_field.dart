@@ -1,13 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pecuaria_news/features/home/widgets/login_state.dart';
 import 'package:provider/provider.dart';
 
 class CommentField extends StatefulWidget {
   final String idNews;
-  final String? userName; // Parâmetro opcional para o nome do usuário
+  final String? userName;
 
   const CommentField({super.key, required this.idNews, this.userName});
 
@@ -26,14 +28,33 @@ class CommentFieldState extends State<CommentField> {
   }
 
   Future<void> _loadCommentsItems() async {
-    final jsonString = await rootBundle.loadString('assets/json/comments.json');
-    final jsonResponse = json.decode(jsonString);
-    setState(() {
-      newsComments = jsonResponse['newsComments'];
-    });
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/comments.json';
+      final file = File(path);
+      if (await file.exists()) {
+        final jsonString = await file.readAsString();
+        final jsonResponse = json.decode(jsonString);
+        setState(() {
+          newsComments = jsonResponse['newsComments'];
+        });
+        print('Comentários carregados do arquivo: $newsComments');
+      } else {
+        final jsonString =
+            await rootBundle.loadString('assets/json/comments.json');
+        final jsonResponse = json.decode(jsonString);
+        setState(() {
+          newsComments = jsonResponse['newsComments'];
+        });
+        await saveCommentsToFile(newsComments);
+        print('Comentários carregados do bundle: $newsComments');
+      }
+    } catch (e) {
+      print('Erro ao carregar os comentários: $e');
+    }
   }
 
-  void _submitComment() {
+  void _submitComment() async {
     final userName = Provider.of<LoginState>(context, listen: false)
         .currentUser
         ?.displayName;
@@ -43,24 +64,42 @@ class CommentFieldState extends State<CommentField> {
 
     if (_commentController.text.isNotEmpty) {
       final newComment = {
-        "idUser": userId ??
-            '0', // Use um valor padrão ou gere um ID conforme necessário
+        "idUser": userId ?? '0',
         "commenter": commenterName,
         "date": DateTime.now().toString(),
         "content": _commentController.text,
         "photoUrl": ""
       };
 
-      setState(() {
-        final newsItemIndex =
-            newsComments.indexWhere((news) => news['idNews'] == widget.idNews);
-        if (newsItemIndex != -1) {
+      int newsItemIndex =
+          newsComments.indexWhere((news) => news['idNews'] == widget.idNews);
+      if (newsItemIndex != -1) {
+        setState(() {
           newsComments[newsItemIndex]['comments'].add(newComment);
-        } else {
-          // Tratar caso onde o idNews não é encontrado, se necessário
-        }
-        _commentController.clear();
-      });
+        });
+        print('Comentário adicionado: $newComment');
+        await saveCommentsToFile(newsComments);
+      } else {
+        print('IdNews não encontrado');
+      }
+      _commentController.clear();
+    }
+  }
+
+  Future<void> saveCommentsToFile(List<dynamic> comments) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/comments.json';
+      final file = File(path);
+      if (!(await file.exists())) {
+        await file.create(recursive: true);
+      }
+      String jsonContent = jsonEncode({"newsComments": comments});
+      print('Salvando comentários no arquivo: $jsonContent');
+      await file.writeAsString(jsonContent);
+      print('Comentários salvos com sucesso.');
+    } catch (e) {
+      print('Erro ao salvar os comentários: $e');
     }
   }
 
@@ -78,7 +117,7 @@ class CommentFieldState extends State<CommentField> {
         filteredComments = newsItem['comments'];
       }
     } catch (e) {
-      // Tratar o caso em que nenhum item de notícia correspondente é encontrado
+      print('Nenhum item de notícia correspondente encontrado: $e');
     }
 
     return Column(
@@ -99,15 +138,11 @@ class CommentFieldState extends State<CommentField> {
                   icon: const Icon(Icons.send),
                   onPressed: _submitComment,
                 ),
-                border: InputBorder
-                    .none, // Adicione esta linha para remover a borda
-                alignLabelWithHint:
-                    true, // Isso ajuda a centralizar o hint quando o campo está vazio
-                contentPadding: const EdgeInsets.fromLTRB(
-                    12, 12, 12, 12), // Ajuste conforme necessário
+                border: InputBorder.none,
+                alignLabelWithHint: true,
+                contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
               ),
-              textAlignVertical:
-                  TextAlignVertical.center, // Centraliza o texto verticalmente
+              textAlignVertical: TextAlignVertical.center,
             ),
           )
         else
@@ -117,7 +152,7 @@ class CommentFieldState extends State<CommentField> {
                 style: Theme.of(context).textTheme.bodyMedium),
           ),
         const SizedBox(height: 16.0),
-        if (filteredComments.isNotEmpty) // Removida a referência a _comments
+        if (filteredComments.isNotEmpty)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
