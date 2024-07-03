@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pecuaria_news/dummy.dart';
 import 'package:pecuaria_news/features/home/widgets/home_slider_indicator_item.dart';
 import 'package:pecuaria_news/features/home/widgets/home_slider_item.dart';
 
@@ -23,6 +25,7 @@ class _HomeSlideState extends State<HomeSlide> {
   final _indicatorWidth = 10.0;
   final _activedIndicatorWidth = 32.0;
   final _indicatorMargin = const EdgeInsets.symmetric(horizontal: 1);
+  List<dynamic> newsItems = [];
 
   @override
   void initState() {
@@ -30,8 +33,8 @@ class _HomeSlideState extends State<HomeSlide> {
     _pageController = PageController(viewportFraction: 0.8, initialPage: 1000);
     _scrollController =
         ScrollController(initialScrollOffset: _calculateIndicatorOffset());
-
     _indicatorsVisibleWidth = _calculateIndicatorWidth();
+    _loadNewsItems();
   }
 
   @override
@@ -39,6 +42,16 @@ class _HomeSlideState extends State<HomeSlide> {
     _scrollController.dispose();
     _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadNewsItems() async {
+    final jsonString = await rootBundle
+        .loadString('assets/json/news.json'); // Carregar o arquivo JSON
+    final jsonResponse = json.decode(jsonString); // Decodificar o JSON
+    setState(() {
+      newsItems = jsonResponse[
+          'newsItems']; // Atualizar o estado com os itens de notícias
+    });
   }
 
   double _calculateIndicatorWidth() {
@@ -60,6 +73,17 @@ class _HomeSlideState extends State<HomeSlide> {
 
   @override
   Widget build(BuildContext context) {
+    // Verifica se newsItems está vazio
+    if (newsItems.isEmpty) {
+      // Retorna um CircularProgressIndicator enquanto os dados estão sendo carregados
+      return const SliverFillRemaining(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    // Se newsItems não estiver vazio, retorna o conteúdo atual
     return SliverList(
       delegate: SliverChildListDelegate(
         [
@@ -68,7 +92,7 @@ class _HomeSlideState extends State<HomeSlide> {
             child: PageView.builder(
               onPageChanged: (index) {
                 setState(() {
-                  _pageIndex = index % newsrItems.length;
+                  _pageIndex = index % newsItems.length;
                 });
                 _scrollController.animateTo(
                   _calculateIndicatorOffset(),
@@ -78,17 +102,17 @@ class _HomeSlideState extends State<HomeSlide> {
               },
               controller: _pageController,
               itemBuilder: (context, index) {
-                final i = index % newsrItems.length;
+                final i = index % newsItems.length;
                 return HomeSliderItem(
                   isActived: _pageIndex == i,
-                  imageAssetPath: newsrItems[i]['imageAssetPath']!,
-                  idNews: newsrItems[i]['idNews']!,
-                  category: newsrItems[i]['category']!,
-                  title: newsrItems[i]['title']!,
-                  content: newsrItems[i]['content']!,
-                  author: newsrItems[i]['author']!,
-                  authorImageAssetPath: newsrItems[i]['authorImageAssetPath']!,
-                  date: DateTime.parse(newsrItems[i]['date']!),
+                  imageAssetPath: newsItems[i]['imageAssetPath']!,
+                  idNews: newsItems[i]['idNews']!,
+                  category: newsItems[i]['category']!,
+                  title: newsItems[i]['title']!,
+                  content: newsItems[i]['content']!,
+                  author: newsItems[i]['author']!,
+                  authorImageAssetPath: newsItems[i]['authorImageAssetPath']!,
+                  date: DateTime.parse(newsItems[i]['date']!),
                 );
               },
             ),
@@ -104,7 +128,7 @@ class _HomeSlideState extends State<HomeSlide> {
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  final i = index % newsrItems.length;
+                  final i = index % newsItems.length;
                   return HomeSliderIndicatorItem(
                     isActived: index == _pageIndex + 999,
                     activedWidth: _activedIndicatorWidth,

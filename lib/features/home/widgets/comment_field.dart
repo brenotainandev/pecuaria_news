@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:pecuaria_news/dummy.dart';
+import 'package:flutter/services.dart';
 import 'package:pecuaria_news/features/home/widgets/login_state.dart';
 import 'package:provider/provider.dart';
 
@@ -15,26 +17,48 @@ class CommentField extends StatefulWidget {
 
 class CommentFieldState extends State<CommentField> {
   final TextEditingController _commentController = TextEditingController();
-  final List<Map<String, String>> _comments = [];
+  List<dynamic> newsComments = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCommentsItems();
+  }
+
+  Future<void> _loadCommentsItems() async {
+    final jsonString = await rootBundle.loadString('assets/json/comments.json');
+    final jsonResponse = json.decode(jsonString);
+    setState(() {
+      newsComments = jsonResponse['newsComments'];
+    });
+  }
 
   void _submitComment() {
-    // Acessar o nome do usuário
     final userName = Provider.of<LoginState>(context, listen: false)
         .currentUser
         ?.displayName;
-
-// Acessar o ID do usuário
     final userId =
         Provider.of<LoginState>(context, listen: false).currentUser?.uid;
-    final commenterName =
-        userName ?? 'Anonymous'; // Usa o nome do usuário se fornecido
+    final commenterName = userName ?? 'Anonymous';
+
     if (_commentController.text.isNotEmpty) {
+      final newComment = {
+        "idUser": userId ??
+            '0', // Use um valor padrão ou gere um ID conforme necessário
+        "commenter": commenterName,
+        "date": DateTime.now().toString(),
+        "content": _commentController.text,
+        "photoUrl": ""
+      };
+
       setState(() {
-        _comments.add({
-          'commenter': commenterName,
-          'date': DateTime.now().toString(),
-          'content': _commentController.text,
-        });
+        final newsItemIndex =
+            newsComments.indexWhere((news) => news['idNews'] == widget.idNews);
+        if (newsItemIndex != -1) {
+          newsComments[newsItemIndex]['comments'].add(newComment);
+        } else {
+          // Tratar caso onde o idNews não é encontrado, se necessário
+        }
         _commentController.clear();
       });
     }
@@ -42,18 +66,16 @@ class CommentFieldState extends State<CommentField> {
 
   @override
   Widget build(BuildContext context) {
-    // Acessar o estado de login
     final loginState = Provider.of<LoginState>(context);
     final isLoggedIn = loginState.currentUser != null;
 
-    List<Map<String, String>> filteredComments = [];
+    List<dynamic> filteredComments = [];
 
     try {
       final newsItem =
           newsComments.firstWhere((news) => news['idNews'] == widget.idNews);
       if (newsItem['comments'] != null) {
-        filteredComments =
-            (newsItem['comments'] as List<dynamic>).cast<Map<String, String>>();
+        filteredComments = newsItem['comments'];
       }
     } catch (e) {
       // Tratar o caso em que nenhum item de notícia correspondente é encontrado
@@ -95,7 +117,7 @@ class CommentFieldState extends State<CommentField> {
                 style: Theme.of(context).textTheme.bodyMedium),
           ),
         const SizedBox(height: 16.0),
-        if (filteredComments.isNotEmpty || _comments.isNotEmpty)
+        if (filteredComments.isNotEmpty) // Removida a referência a _comments
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -103,17 +125,6 @@ class CommentFieldState extends State<CommentField> {
                   style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
               ...filteredComments.map((comment) {
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 4.0),
-                  elevation: 2.0,
-                  child: ListTile(
-                    leading: const Icon(Icons.account_circle, size: 40.0),
-                    title: Text('${comment['commenter']} (${comment['date']})'),
-                    subtitle: Text('${comment['content']}'),
-                  ),
-                );
-              }).toList(),
-              ..._comments.map((comment) {
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 4.0),
                   elevation: 2.0,
