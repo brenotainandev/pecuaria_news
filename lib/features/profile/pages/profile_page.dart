@@ -13,11 +13,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  bool _isSigningOut = false; // Flag para controlar o processo de deslogar
 
   @override
   void initState() {
     super.initState();
     _googleSignIn.onCurrentUserChanged.listen((account) {
+      if (_isSigningOut) return; // Se estiver deslogando, não faça nada
       setState(() {
         Provider.of<LoginState>(context, listen: false).setCurrentUser(account);
       });
@@ -42,14 +44,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _handleGoogleSignOut() async {
     try {
-      // Chama o método signOut do GoogleSignIn diretamente aqui, se necessário
+      _isSigningOut = true; // Indica que o processo de deslogar foi iniciado
       await _googleSignIn.signOut();
-      // Verifica se o contexto ainda é válido antes de chamar o Provider
       if (!mounted) return;
       await Provider.of<LoginState>(context, listen: false).signOut();
     } catch (error) {
       if (kDebugMode) {
         print('Erro ao deslogar: $error');
+      }
+    } finally {
+      _isSigningOut = false; // Reseta a flag após o processo de deslogar
+      if (mounted) {
+        setState(() {
+          // Força a atualização da UI para refletir o estado de deslogado
+        });
       }
     }
   }
