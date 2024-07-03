@@ -152,6 +152,35 @@ class CommentFieldState extends State<CommentField> {
     }
   }
 
+  Future<void> _deleteComment(String commentId) async {
+    final userId =
+        Provider.of<LoginState>(context, listen: false).currentUser?.uid;
+    if (userId == null) {
+      print('Usuário não autenticado.');
+      return;
+    }
+
+    int newsItemIndex =
+        newsComments.indexWhere((news) => news['idNews'] == widget.idNews);
+    if (newsItemIndex != -1) {
+      List<dynamic> comments = newsComments[newsItemIndex]['comments'];
+      int commentIndex = comments.indexWhere((comment) =>
+          comment['idComment'] == commentId && comment['idUser'] == userId);
+      if (commentIndex != -1) {
+        setState(() {
+          newsComments[newsItemIndex]['comments'].removeAt(commentIndex);
+        });
+        print('Comentário deletado.');
+        await saveCommentsToFile(newsComments);
+      } else {
+        print(
+            'Comentário não encontrado ou usuário não tem permissão para deletar este comentário.');
+      }
+    } else {
+      print('IdNews não encontrado');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final loginState = Provider.of<LoginState>(context);
@@ -220,46 +249,59 @@ class CommentFieldState extends State<CommentField> {
                                 .currentUser
                                 ?.uid ==
                             comment['idUser']
-                        ? IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () async {
-                              final String text = comment['content'] ?? '';
-                              final String commentId =
-                                  comment['idComment'] ?? '';
-                              final TextEditingController editController =
-                                  TextEditingController(text: text);
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () async {
+                                  final String text = comment['content'] ?? '';
+                                  final String commentId =
+                                      comment['idComment'] ?? '';
+                                  final TextEditingController editController =
+                                      TextEditingController(text: text);
 
-                              await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Editar Comentário'),
-                                    content: TextField(
-                                      controller: editController,
-                                      decoration: InputDecoration(
-                                          hintText:
-                                              "Digite seu comentário aqui"),
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text('Cancelar'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: Text('Salvar'),
-                                        onPressed: () async {
-                                          Navigator.of(context).pop();
-                                          await _editComment(
-                                              commentId, editController.text);
-                                        },
-                                      ),
-                                    ],
+                                  await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Editar Comentário'),
+                                        content: TextField(
+                                          controller: editController,
+                                          decoration: InputDecoration(
+                                              hintText:
+                                                  "Digite seu comentário aqui"),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text('Cancelar'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('Salvar'),
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                              await _editComment(commentId,
+                                                  editController.text);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  // Aqui você chama o método para deletar o comentário
+                                  // Substitua `_deleteComment` pelo nome do seu método real
+                                  await _deleteComment(comment['idComment']);
+                                },
+                              ),
+                            ],
                           )
                         : null,
                   ),
