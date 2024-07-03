@@ -41,8 +41,17 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _handleGoogleSignOut() async {
-    // Chama o método signOut do LoginState para deslogar do Google e do Firebase
-    await Provider.of<LoginState>(context, listen: false).signOut();
+    try {
+      // Chama o método signOut do GoogleSignIn diretamente aqui, se necessário
+      await _googleSignIn.signOut();
+      // Verifica se o contexto ainda é válido antes de chamar o Provider
+      if (!mounted) return;
+      await Provider.of<LoginState>(context, listen: false).signOut();
+    } catch (error) {
+      if (kDebugMode) {
+        print('Erro ao deslogar: $error');
+      }
+    }
   }
 
   @override
