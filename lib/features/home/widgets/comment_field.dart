@@ -10,8 +10,10 @@ import 'package:provider/provider.dart';
 class CommentField extends StatefulWidget {
   final String idNews;
   final String? userName;
+  final String? idUser;
 
-  const CommentField({super.key, required this.idNews, this.userName});
+  const CommentField(
+      {super.key, required this.idNews, this.userName, this.idUser});
 
   @override
   CommentFieldState createState() => CommentFieldState();
@@ -62,8 +64,12 @@ class CommentFieldState extends State<CommentField> {
         Provider.of<LoginState>(context, listen: false).currentUser?.uid;
     final commenterName = userName ?? 'Anonymous';
 
+    print('userId: $userId');
     if (_commentController.text.isNotEmpty) {
+      final newCommentId = DateTime.now().millisecondsSinceEpoch.toString();
+
       final newComment = {
+        "idComment": newCommentId,
         "idUser": userId ?? '0',
         "commenter": commenterName,
         "date": DateTime.now().toString(),
@@ -74,6 +80,9 @@ class CommentFieldState extends State<CommentField> {
       int newsItemIndex =
           newsComments.indexWhere((news) => news['idNews'] == widget.idNews);
       if (newsItemIndex != -1) {
+        if (newsComments[newsItemIndex]['comments'] == null) {
+          newsComments[newsItemIndex]['comments'] = [];
+        }
         setState(() {
           newsComments[newsItemIndex]['comments'].add(newComment);
         });
@@ -100,6 +109,46 @@ class CommentFieldState extends State<CommentField> {
       print('Comentários salvos com sucesso.');
     } catch (e) {
       print('Erro ao salvar os comentários: $e');
+    }
+  }
+
+  Future<void> _editComment(String commentId, String newContent) async {
+    final userId =
+        Provider.of<LoginState>(context, listen: false).currentUser?.uid;
+    print('Tentando editar comentário. UserID: $userId, CommentID: $commentId');
+
+    if (userId == null) {
+      print('Usuário não autenticado.');
+      return;
+    }
+
+    int newsItemIndex =
+        newsComments.indexWhere((news) => news['idNews'] == widget.idNews);
+    print('NewsItemIndex: $newsItemIndex');
+
+    if (newsItemIndex != -1) {
+      List<dynamic> comments = newsComments[newsItemIndex]['comments'];
+      int commentIndex = comments.indexWhere((comment) =>
+          comment['idComment'] == commentId && comment['idUser'] == userId);
+      print('CommentIndex: $commentIndex');
+
+      if (commentIndex != -1) {
+        setState(() {
+          newsComments[newsItemIndex]['comments'][commentIndex] = {
+            ...newsComments[newsItemIndex]['comments'][commentIndex],
+            'content': newContent,
+            'date': DateTime.now().toString()
+          };
+        });
+        print(
+            'Comentário editado: ${newsComments[newsItemIndex]['comments'][commentIndex]}');
+        await saveCommentsToFile(newsComments);
+      } else {
+        print(
+            'Comentário não encontrado ou usuário não tem permissão para editar este comentário.');
+      }
+    } else {
+      print('IdNews não encontrado');
     }
   }
 
@@ -167,6 +216,52 @@ class CommentFieldState extends State<CommentField> {
                     leading: const Icon(Icons.account_circle, size: 40.0),
                     title: Text('${comment['commenter']} (${comment['date']})'),
                     subtitle: Text('${comment['content']}'),
+                    trailing: Provider.of<LoginState>(context)
+                                .currentUser
+                                ?.uid ==
+                            comment['idUser']
+                        ? IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              final String text = comment['content'] ?? '';
+                              final String commentId =
+                                  comment['idComment'] ?? '';
+                              final TextEditingController editController =
+                                  TextEditingController(text: text);
+
+                              await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Editar Comentário'),
+                                    content: TextField(
+                                      controller: editController,
+                                      decoration: InputDecoration(
+                                          hintText:
+                                              "Digite seu comentário aqui"),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('Salvar'),
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                          await _editComment(
+                                              commentId, editController.text);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          )
+                        : null,
                   ),
                 );
               }).toList(),
