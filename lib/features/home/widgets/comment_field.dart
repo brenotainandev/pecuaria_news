@@ -238,12 +238,15 @@ class CommentFieldState extends State<CommentField> {
                   style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
               ...filteredComments.map((comment) {
+                final DateTime commentDate = DateTime.parse(comment['date']);
+                final String formattedDate =
+                    "${commentDate.day}/${commentDate.month}/${commentDate.year}";
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 4.0),
                   elevation: 2.0,
                   child: ListTile(
                     leading: const Icon(Icons.account_circle, size: 40.0),
-                    title: Text('${comment['commenter']} (${comment['date']})'),
+                    title: Text('${comment['commenter']} ($formattedDate)'),
                     subtitle: Text('${comment['content']}'),
                     trailing: Provider.of<LoginState>(context)
                                 .currentUser
@@ -296,9 +299,31 @@ class CommentFieldState extends State<CommentField> {
                               IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () async {
-                                  // Aqui você chama o método para deletar o comentário
-                                  // Substitua `_deleteComment` pelo nome do seu método real
-                                  await _deleteComment(comment['idComment']);
+                                  final bool confirmDelete = await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: Text('Confirmar exclusão'),
+                                      content: Text(
+                                          'Você realmente deseja excluir este comentário?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text('Cancelar'),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                        ),
+                                        TextButton(
+                                          child: Text('Excluir'),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+
+                                  if (confirmDelete) {
+                                    await _deleteComment(comment['idComment']);
+                                  }
                                 },
                               ),
                             ],
