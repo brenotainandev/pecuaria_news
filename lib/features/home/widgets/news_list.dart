@@ -20,16 +20,6 @@ class _NewsListState extends State<NewsList> {
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
-  }
-
-  Future<void> _loadInitialData() async {
-    _isLoading = true;
-    await Future.delayed(const Duration(milliseconds: 1000));
-    final jsonResponse = await _fetchNewsData();
-    loadedNewsItems.addAll(jsonResponse['newsItems'].sublist(0, pageSize));
-    _isLoading = false;
-    if (mounted) setState(() {});
   }
 
   Future<void> _loadMoreData() async {
