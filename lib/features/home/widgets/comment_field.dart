@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pecuaria_news/features/home/widgets/login_state.dart';
+import 'package:pecuaria_news/theme/app_colors.dart';
 import 'package:provider/provider.dart';
+import 'package:pecuaria_news/core/utils/app_date_formattedrs.dart';
 
 class CommentField extends StatefulWidget {
   final String idNews;
@@ -239,15 +241,22 @@ class CommentFieldState extends State<CommentField> {
               const SizedBox(height: 8.0),
               ...filteredComments.map((comment) {
                 final DateTime commentDate = DateTime.parse(comment['date']);
-                final String formattedDate =
-                    "${commentDate.day}/${commentDate.month}/${commentDate.year}";
+                final String formattedDate = AppDateFormatters.mdY(commentDate);
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 4.0),
                   elevation: 2.0,
                   child: ListTile(
                     leading: const Icon(Icons.account_circle, size: 40.0),
-                    title: Text('${comment['commenter']} ($formattedDate)'),
-                    subtitle: Text('${comment['content']}'),
+                    title: Text(
+                      '${comment['commenter']} · $formattedDate',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: AppColors.osloGrey,
+                          ),
+                    ),
+                    subtitle: Text(
+                      '${comment['content']}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     trailing: Provider.of<LoginState>(context)
                                 .currentUser
                                 ?.uid ==
@@ -256,7 +265,7 @@ class CommentFieldState extends State<CommentField> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.edit),
+                                icon: const Icon(Icons.edit),
                                 onPressed: () async {
                                   final String text = comment['content'] ?? '';
                                   final String commentId =
@@ -268,22 +277,22 @@ class CommentFieldState extends State<CommentField> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text('Editar Comentário'),
+                                        title: const Text('Editar Comentário'),
                                         content: TextField(
                                           controller: editController,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
                                               hintText:
                                                   "Digite seu comentário aqui"),
                                         ),
                                         actions: <Widget>[
                                           TextButton(
-                                            child: Text('Cancelar'),
+                                            child: const Text('Cancelar'),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                           ),
                                           TextButton(
-                                            child: Text('Salvar'),
+                                            child: const Text('Salvar'),
                                             onPressed: () async {
                                               Navigator.of(context).pop();
                                               await _editComment(commentId,
@@ -297,23 +306,23 @@ class CommentFieldState extends State<CommentField> {
                                 },
                               ),
                               IconButton(
-                                icon: Icon(Icons.delete),
+                                icon: const Icon(Icons.delete),
                                 onPressed: () async {
                                   final bool confirmDelete = await showDialog(
                                     context: context,
                                     builder: (BuildContext context) =>
                                         AlertDialog(
-                                      title: Text('Confirmar exclusão'),
-                                      content: Text(
+                                      title: const Text('Confirmar exclusão'),
+                                      content: const Text(
                                           'Você realmente deseja excluir este comentário?'),
                                       actions: <Widget>[
                                         TextButton(
-                                          child: Text('Cancelar'),
+                                          child: const Text('Cancelar'),
                                           onPressed: () =>
                                               Navigator.of(context).pop(false),
                                         ),
                                         TextButton(
-                                          child: Text('Excluir'),
+                                          child: const Text('Excluir'),
                                           onPressed: () =>
                                               Navigator.of(context).pop(true),
                                         ),
