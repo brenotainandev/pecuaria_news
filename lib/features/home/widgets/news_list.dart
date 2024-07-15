@@ -15,6 +15,7 @@ class _NewsListState extends State<NewsList> {
   List<dynamic> loadedNewsItems = [];
   bool _hasMore = true;
   bool _isLoading = false;
+  int _currentPage = 0;
 
   @override
   void initState() {
@@ -24,39 +25,40 @@ class _NewsListState extends State<NewsList> {
 
   Future<void> _loadInitialData() async {
     _isLoading = true;
-    final jsonString = await rootBundle.loadString('assets/json/news.json');
-    final jsonResponse = json.decode(jsonString);
+    await Future.delayed(const Duration(milliseconds: 1000));
+    final jsonResponse = await _fetchNewsData();
     loadedNewsItems.addAll(jsonResponse['newsItems'].sublist(0, pageSize));
     _isLoading = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   Future<void> _loadMoreData() async {
     if (!_hasMore || _isLoading) return;
 
     _isLoading = true;
-    final jsonString = await rootBundle.loadString('assets/json/news.json');
-    final jsonResponse = json.decode(jsonString);
+    await Future.delayed(const Duration(milliseconds: 1000));
+    final jsonResponse = await _fetchNewsData();
     final totalItems = jsonResponse['newsItems'].length;
-    final int nextIndex = loadedNewsItems.length + pageSize;
-    // Garante que o índice final não exceda o tamanho total da lista
-    final int endIndex = nextIndex > totalItems ? totalItems : nextIndex;
-
+    final int startIndex = _currentPage * pageSize;
+    final int endIndex =
+        startIndex + pageSize > totalItems ? totalItems : startIndex + pageSize;
     List<dynamic> nextItems =
-        jsonResponse['newsItems'].sublist(loadedNewsItems.length, endIndex);
+        jsonResponse['newsItems'].sublist(startIndex, endIndex);
 
     if (nextItems.isEmpty) {
       _hasMore = false;
     } else {
-      // Carrega e exibe cada item individualmente com um atraso
-      for (var item in nextItems) {
-        loadedNewsItems.add(item);
-        await Future.delayed(const Duration(milliseconds: 1000));
-        setState(() {});
-      }
+      loadedNewsItems.addAll(nextItems);
+      _currentPage++;
     }
 
     _isLoading = false;
+    if (mounted) setState(() {});
+  }
+
+  Future<Map<String, dynamic>> _fetchNewsData() async {
+    final jsonString = await rootBundle.loadString('assets/json/news.json');
+    return json.decode(jsonString);
   }
 
   @override
@@ -64,12 +66,13 @@ class _NewsListState extends State<NewsList> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
+          if (index >= loadedNewsItems.length && _hasMore && !_isLoading) {
+            _loadMoreData();
+          }
           if (index == loadedNewsItems.length) {
-            if (_hasMore) {
-              _loadMoreData();
-              return const Center(child: CircularProgressIndicator());
-            }
-            return null;
+            return _hasMore
+                ? const Center(child: CircularProgressIndicator())
+                : null;
           }
           final newsItem = loadedNewsItems[index];
           return NewsListItem(
@@ -83,7 +86,7 @@ class _NewsListState extends State<NewsList> {
             date: DateTime.parse(newsItem['date']!),
           );
         },
-        childCount: loadedNewsItems.length + (_hasMore ? 1 : 0),
+        childCount: loadedNewsItems.length + 1,
       ),
     );
   }
