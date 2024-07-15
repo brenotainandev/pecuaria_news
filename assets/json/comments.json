@@ -12,7 +12,7 @@
           "photoUrl": ""
         },
         {
-          "idComment": "3",
+          "idComment": "2",
           "idUser": "2",
           "commenter": "Maria",
           "date": "2024-04-02",
@@ -25,7 +25,7 @@
       "idNews": "2",
       "comments": [
         {
-          "idComment": "4",
+          "idComment": "3",
           "idUser": "1",
           "commenter": "Breno",
           "date": "2024-04-01",
@@ -33,7 +33,7 @@
           "photoUrl": ""
         },
         {
-          "idComment": "5",
+          "idComment": "4",
           "idUser": "1",
           "commenter": "Maria",
           "date": "2024-04-02",
@@ -63,7 +63,85 @@
           "idUser": "1",
           "commenter": "Breno",
           "date": "2024-04-01",
-          "content": "Jogador incrível!",
+          "content": "Tecnologia incrível!",
+          "photoUrl": ""
+        }
+      ]
+    },
+    {
+      "idNews": "5",
+      "comments": [
+        {
+          "idComment": "7",
+          "idUser": "1",
+          "commenter": "Breno",
+          "date": "2024-04-01",
+          "content": "Tecnologia incrível!",
+          "photoUrl": ""
+        }
+      ]
+    },
+    {
+      "idNews": "6",
+      "comments": [
+        {
+          "idComment": "8",
+          "idUser": "1",
+          "commenter": "Breno",
+          "date": "2024-04-01",
+          "content": "Tecnologia incrível!",
+          "photoUrl": ""
+        }
+      ]
+    },
+    {
+      "idNews": "7",
+      "comments": [
+        {
+          "idComment": "9",
+          "idUser": "1",
+          "commenter": "Breno",
+          "date": "2024-04-01",
+          "content": "Tecnologia incrível!",
+          "photoUrl": ""
+        }
+      ]
+    },
+    {
+      "idNews": "8",
+      "comments": [
+        {
+          "idComment": "10",
+          "idUser": "1",
+          "commenter": "Breno",
+          "date": "2024-04-01",
+          "content": "Tecnologia incrível!",
+          "photoUrl": ""
+        }
+      ]
+    },
+    {
+      "idNews": "9",
+      "comments": [
+        {
+          "idComment": "11",
+          "idUser": "1",
+          "commenter": "Breno",
+          "date": "2024-04-01",
+          "content": "Tecnologia incrível!",
+          "photoUrl": ""
+        }
+      ]
+    },
+    {
+      "idNews": "10",
+      "comments": [
+        {
+          "idComment": "12",
+          "idUser": "1",
+          "commenter": "Breno",
+          "date": "2024-04-01",
+          "content": "Tecnologia incrível!",
           "photoUrl": ""
         }
       ]
