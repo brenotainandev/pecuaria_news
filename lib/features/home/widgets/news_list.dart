@@ -11,37 +11,72 @@ class NewsList extends StatefulWidget {
 }
 
 class _NewsListState extends State<NewsList> {
-  List<dynamic> newsItems = [];
+  static const int pageSize = 2;
+  List<dynamic> loadedNewsItems = [];
+  bool _hasMore = true;
+  bool _isLoading = false;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _loadNewsItems();
   }
 
-  Future<void> _loadNewsItems() async {
+  Future<void> _loadMoreData() async {
+    if (!_hasMore || _isLoading) return;
+
+    _isLoading = true;
+    await Future.delayed(const Duration(milliseconds: 1000));
+    final jsonResponse = await _fetchNewsData();
+    final totalItems = jsonResponse['newsItems'].length;
+    final int startIndex = _currentPage * pageSize;
+    final int endIndex =
+        startIndex + pageSize > totalItems ? totalItems : startIndex + pageSize;
+    List<dynamic> nextItems =
+        jsonResponse['newsItems'].sublist(startIndex, endIndex);
+
+    if (nextItems.isEmpty) {
+      _hasMore = false;
+    } else {
+      loadedNewsItems.addAll(nextItems);
+      _currentPage++;
+    }
+
+    _isLoading = false;
+    if (mounted) setState(() {});
+  }
+
+  Future<Map<String, dynamic>> _fetchNewsData() async {
     final jsonString = await rootBundle.loadString('assets/json/news.json');
-    final jsonResponse = json.decode(jsonString);
-    setState(() {
-      newsItems = jsonResponse['newsItems'];
-    });
+    return json.decode(jsonString);
   }
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, i) => NewsListItem(
-          idNews: newsItems[i]['idNews']!,
-          imageAssetPath: newsItems[i]['imageAssetPath']!,
-          category: newsItems[i]['category']!,
-          title: newsItems[i]['title']!,
-          content: newsItems[i]['content']!,
-          author: newsItems[i]['author']!,
-          authorImageAssetPath: newsItems[i]['authorImageAssetPath']!,
-          date: DateTime.parse(newsItems[i]['date']!),
-        ),
-        childCount: newsItems.length,
+        (context, index) {
+          if (index >= loadedNewsItems.length && _hasMore && !_isLoading) {
+            _loadMoreData();
+          }
+          if (index == loadedNewsItems.length) {
+            return _hasMore
+                ? const Center(child: CircularProgressIndicator())
+                : null;
+          }
+          final newsItem = loadedNewsItems[index];
+          return NewsListItem(
+            idNews: newsItem['idNews']!,
+            imageAssetPath: newsItem['imageAssetPath']!,
+            category: newsItem['category']!,
+            title: newsItem['title']!,
+            content: newsItem['content']!,
+            author: newsItem['author']!,
+            authorImageAssetPath: newsItem['authorImageAssetPath']!,
+            date: DateTime.parse(newsItem['date']!),
+          );
+        },
+        childCount: loadedNewsItems.length + 1,
       ),
     );
   }

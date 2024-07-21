@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pecuaria_news/features/home/widgets/home_slider_indicator_item.dart';
 import 'package:pecuaria_news/features/home/widgets/home_slider_item.dart';
 
