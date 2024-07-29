@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pecuaria_news/api/servicos.dart';
 import 'package:pecuaria_news/features/home/widgets/home_slider_indicator_item.dart';
 import 'package:pecuaria_news/features/home/widgets/home_slider_item.dart';
 
@@ -17,6 +15,8 @@ class _HomeSlideState extends State<HomeSlide> {
   late final ScrollController _scrollController;
   late final double _indicatorsVisibleWidth;
 
+  late ServicoNews _servicoNNews;
+
   int _pageIndex = 0;
 
   final _displayIdicatorsCount = 5.0;
@@ -28,6 +28,7 @@ class _HomeSlideState extends State<HomeSlide> {
   @override
   void initState() {
     super.initState();
+    _servicoNNews = ServicoNews();
     _pageController = PageController(viewportFraction: 0.8, initialPage: 1000);
     _scrollController =
         ScrollController(initialScrollOffset: _calculateIndicatorOffset());
@@ -43,13 +44,15 @@ class _HomeSlideState extends State<HomeSlide> {
   }
 
   Future<void> _loadNewsItems() async {
-    final jsonString = await rootBundle
-        .loadString('assets/json/news.json'); // Carregar o arquivo JSON
-    final jsonResponse = json.decode(jsonString); // Decodificar o JSON
-    setState(() {
-      newsItems = jsonResponse[
-          'newsItems']; // Atualizar o estado com os itens de notícias
-    });
+    try {
+      final news = await _servicoNNews.getProdutos(
+          0, 5); // Carregar as 5 primeiras notícias
+      setState(() {
+        newsItems = news; // Atualizar o estado com os itens de notícias
+      });
+    } catch (e) {
+      print("Erro ao carregar notícias: $e");
+    }
   }
 
   double _calculateIndicatorWidth() {
@@ -103,14 +106,21 @@ class _HomeSlideState extends State<HomeSlide> {
                 final i = index % newsItems.length;
                 return HomeSliderItem(
                   isActived: _pageIndex == i,
-                  imageAssetPath: newsItems[i]['imageAssetPath']!,
-                  idNews: newsItems[i]['idNews']!,
-                  category: newsItems[i]['category']!,
-                  title: newsItems[i]['title']!,
-                  content: newsItems[i]['content']!,
-                  author: newsItems[i]['author']!,
-                  authorImageAssetPath: newsItems[i]['authorImageAssetPath']!,
-                  date: DateTime.parse(newsItems[i]['date']!),
+                  imageAssetPath: newsItems[i]['imageAssetPath'] != null
+                      ? caminhoArquivo(newsItems[i]['imageAssetPath']!)
+                      : '',
+                  idNews: newsItems[i]['idNews'] ?? '',
+                  category: newsItems[i]['category'] ?? '',
+                  title: newsItems[i]['title'] ?? '',
+                  content: newsItems[i]['content'] ?? '',
+                  author: newsItems[i]['author'] ?? '',
+                  authorImageAssetPath: newsItems[i]['authorImageAssetPath'] !=
+                          null
+                      ? caminhoArquivo(newsItems[i]['authorImageAssetPath']!)
+                      : '',
+                  date: newsItems[i]['date'] != null
+                      ? DateTime.parse(newsItems[i]['date']!)
+                      : DateTime.now(),
                 );
               },
             ),

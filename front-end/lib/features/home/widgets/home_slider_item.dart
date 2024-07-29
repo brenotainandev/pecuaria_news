@@ -57,7 +57,7 @@ class HomeSliderItem extends StatelessWidget {
             child: Stack(
               alignment: AlignmentDirectional.bottomCenter,
               children: [
-                Image.asset(
+                Image.network(
                   imageAssetPath,
                   fit: BoxFit.cover,
                   width: double.maxFinite,

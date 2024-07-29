@@ -52,7 +52,7 @@ class NewsListItem extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
+              child: Image.network(
                 imageAssetPath,
                 width: 150,
                 height: 150,
@@ -85,7 +85,7 @@ class NewsListItem extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage(
+                        backgroundImage: NetworkImage(
                           authorImageAssetPath,
                         ),
                         radius: 15,
