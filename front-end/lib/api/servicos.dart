@@ -35,18 +35,10 @@ class ServicoNews {
 }
 
 class ServicoComments {
-  static const String URL_COMMENTS = "http://192.168.0.11:5001/comments";
+  static const String URL_COMMENTS = "http://192.168.0.11:5002/comments";
 
   Future<List<dynamic>> getAllComments(int idNews) async {
     final resposta = await http.get(Uri.parse("$URL_COMMENTS/$idNews"));
-    final comments = jsonDecode(resposta.body);
-    return comments;
-  }
-
-  Future<List<dynamic>> getComments(
-      int idNews, int ultimoComentario, int tamanhoPagina) async {
-    final resposta = await http.get(
-        Uri.parse("$URL_COMMENTS/$idNews/$ultimoComentario/$tamanhoPagina"));
     final comments = jsonDecode(resposta.body);
     return comments;
   }
