@@ -45,8 +45,8 @@ class _HomeSlideState extends State<HomeSlide> {
 
   Future<void> _loadNewsItems() async {
     try {
-      final news = await _servicoNNews.getProdutos(
-          0, 5); // Carregar as 5 primeiras notícias
+      final news =
+          await _servicoNNews.getNews(0, 5); // Carregar as 5 primeiras notícias
       setState(() {
         newsItems = news; // Atualizar o estado com os itens de notícias
       });

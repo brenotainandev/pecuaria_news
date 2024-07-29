@@ -5,7 +5,7 @@ import 'package:pecuaria_news/theme/app_colors.dart';
 
 class HomeSliderItem extends StatelessWidget {
   final bool isActived;
-  final String idNews;
+  final int idNews;
   final String imageAssetPath;
   final String category;
   final String title;

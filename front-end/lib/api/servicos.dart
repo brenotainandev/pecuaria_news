@@ -12,7 +12,7 @@ final URL_ARQUIVOS = "${URL_SERVICOS.toString()}:5005";
 class ServicoNews {
   static const String URL_NEWS = "http://192.168.0.11:5001/news";
 
-  Future<List<dynamic>> getProdutos(int ultimoFeed, int tamanhoPagina) async {
+  Future<List<dynamic>> getNews(int ultimoFeed, int tamanhoPagina) async {
     final resposta =
         await http.get(Uri.parse("$URL_NEWS/$ultimoFeed/$tamanhoPagina"));
     final feeds = jsonDecode(resposta.body);

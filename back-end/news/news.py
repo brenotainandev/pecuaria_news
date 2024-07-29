@@ -26,10 +26,10 @@ def get_news(ultimo_feed, tamanho_da_pagina):
     conexao = get_conexao_com_bd()
     cursor = conexao.cursor(dictionary=True)
     cursor.execute(
-        "SELECT news.idNews as news_id, DATE_FORMAT(news.date, '%Y-%m-%d') as date, " +
+        "SELECT news.idNews, DATE_FORMAT(news.date, '%Y-%m-%d') as date, " +
         "news.category, news.author, news.authorImageAssetPath, news.title, news.content, news.imageAssetPath " +
         "FROM news " +
-        "WHERE news.idNews > %s ORDER BY news_id ASC, date DESC " +
+        "WHERE news.idNews > %s ORDER BY idNews ASC, date DESC " +
         "LIMIT %s", (ultimo_feed, tamanho_da_pagina)
     )
     noticias = cursor.fetchall()
@@ -45,10 +45,10 @@ def find_news(ultimo_feed, tamanho_da_pagina, titulo):
     conexao = get_conexao_com_bd()
     cursor = conexao.cursor(dictionary=True)
     cursor.execute(
-        "SELECT news.idNews as news_id, DATE_FORMAT(news.date, '%Y-%m-%d') as date, " +
+        "SELECT news.idNews, DATE_FORMAT(news.date, '%Y-%m-%d') as date, " +
         "news.category, news.author, news.authorImageAssetPath, news.title, news.content, news.imageAssetPath " +
         "FROM news " +
-        "WHERE news.title LIKE %s AND news.idNews > %s ORDER BY news_id ASC, date DESC " +
+        "WHERE news.title LIKE %s AND news.idNews > %s ORDER BY idNews ASC, date DESC " +
         "LIMIT %s", ('%' + titulo + '%', ultimo_feed, tamanho_da_pagina)
     )
     noticias = cursor.fetchall()
@@ -64,7 +64,7 @@ def find_news_by_id(feed):
     conexao = get_conexao_com_bd()
     cursor = conexao.cursor(dictionary=True)
     cursor.execute(
-        "SELECT news.idNews as news_id, DATE_FORMAT(news.date, '%Y-%m-%d') as date, " +
+        "SELECT news.idNews, DATE_FORMAT(news.date, '%Y-%m-%d') as date, " +
         "news.category, news.author, news.authorImageAssetPath, news.title, news.content, news.imageAssetPath " +
         "FROM news " +
         "WHERE news.idNews = %s", (feed,)

@@ -30,15 +30,8 @@ class _NewsListState extends State<NewsList> {
 
     _isLoading = true;
     await Future.delayed(const Duration(milliseconds: 1000));
-    final jsonResponse = await _fetchNewsData();
-
-    final totalItems = jsonResponse['newsItems'].length;
     final int startIndex = _currentPage * pageSize;
-    final int endIndex =
-        startIndex + pageSize > totalItems ? totalItems : startIndex + pageSize;
-    List<dynamic> nextItems =
-        await _servicoNNews.getProdutos(startIndex, pageSize);
-
+    List<dynamic> nextItems = await _servicoNNews.getNews(startIndex, pageSize);
     if (nextItems.isEmpty) {
       _hasMore = false;
     } else {

@@ -4,13 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pecuaria_news/api/servicos.dart';
 import 'package:pecuaria_news/features/home/widgets/login_state.dart';
 import 'package:pecuaria_news/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:pecuaria_news/core/utils/app_date_formattedrs.dart';
 
 class CommentField extends StatefulWidget {
-  final String idNews;
+  final int idNews;
   final String? userName;
   final String? idUser;
 
@@ -24,14 +25,17 @@ class CommentField extends StatefulWidget {
 class CommentFieldState extends State<CommentField> {
   final TextEditingController _commentController = TextEditingController();
   List<dynamic> newsComments = [];
+  late ServicoComments _servicoComments;
 
   @override
   void initState() {
     super.initState();
+    _servicoComments = ServicoComments();
     _loadCommentsItems();
   }
 
   Future<void> _loadCommentsItems() async {
+    print("this.idNews:  ${widget.idNews}");
     try {
       final directory = await getApplicationDocumentsDirectory();
       final path = '${directory.path}/comments.json';

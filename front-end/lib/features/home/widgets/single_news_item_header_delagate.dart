@@ -68,7 +68,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
           bottom: -10,
           left: 0,
           right: 0,
-          child: Image.asset(
+          child: Image.network(
             imageAssetPath,
             fit: BoxFit.cover,
           ),
