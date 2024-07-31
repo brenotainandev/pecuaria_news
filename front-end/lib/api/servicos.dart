@@ -43,17 +43,42 @@ class ServicoComments {
     return comments;
   }
 
-  Future<Map<String, dynamic>> addComentario(
-      int idNews, String commenter, String photoUrl, String content) async {
+  Future<Map<String, dynamic>> addComentario(int idNews, String displayName,
+      String email, String photoUrl, String content, String uid) async {
     final resposta = await http.post(
-      Uri.parse(
-          "$URL_COMMENTS/adicionar/$idNews/$commenter/$photoUrl/$content"),
+      Uri.parse("$URL_COMMENTS/adicionar"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'id_news': idNews,
+        'display_name': displayName,
+        'email': email,
+        'photo_url': photoUrl,
+        'content': content,
+        'uid': uid,
+      }),
     );
     final result = jsonDecode(resposta.body);
     return result;
   }
 
-  Future<Map<String, dynamic>> removerComentario(int comentarioId) async {
+  Future<Map<String, dynamic>> editarComentario(
+      String comentarioId, String novoConteudo) async {
+    final resposta = await http.put(
+      Uri.parse("$URL_COMMENTS/editar/$comentarioId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'content': novoConteudo,
+      }),
+    );
+    final result = jsonDecode(resposta.body);
+    return result;
+  }
+
+  Future<Map<String, dynamic>> removerComentario(String comentarioId) async {
     final resposta =
         await http.delete(Uri.parse("$URL_COMMENTS/remover/$comentarioId"));
     final result = jsonDecode(resposta.body);

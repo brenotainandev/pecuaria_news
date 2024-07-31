@@ -43,22 +43,24 @@ class CommentFieldState extends State<CommentField> {
   }
 
   void _submitComment() async {
-    final userName = Provider.of<LoginState>(context, listen: false)
-        .currentUser
-        ?.displayName;
-    final userId =
-        Provider.of<LoginState>(context, listen: false).currentUser?.uid;
-    final commenterName = userName ?? 'Anonymous';
+    final user = Provider.of<LoginState>(context, listen: false).currentUser;
+    final userName = user?.displayName ?? 'Anonymous';
+    final uid = user?.uid;
+    final userEmail = user?.email;
+    final userPhotoUrl = user?.photoUrl ?? "";
 
-    print('userId: $userId');
+    print('userId: $uid');
     if (_commentController.text.isNotEmpty) {
       try {
         final newComment = await _servicoComments.addComentario(
           widget.idNews,
-          commenterName,
-          "", // photoUrl
+          userName,
+          userEmail ?? '', // Certifique-se de que userEmail não seja nulo
+          userPhotoUrl,
           _commentController.text,
+          uid ?? '', // Certifique-se de que uid não seja nulo
         );
+        print('Comentário adicionado: $newComment');
 
         setState(() {
           newsComments.add(newComment);
@@ -71,9 +73,7 @@ class CommentFieldState extends State<CommentField> {
     }
   }
 
-  Future<void> _editComment(String commentId, String newContent) async {}
-
-  Future<void> _deleteComment(String commentId) async {
+  Future<void> _editComment(int commentId, String newContent) async {
     final userId =
         Provider.of<LoginState>(context, listen: false).currentUser?.uid;
     if (userId == null) {
@@ -82,7 +82,30 @@ class CommentFieldState extends State<CommentField> {
     }
 
     try {
-      await _servicoComments.removerComentario(int.parse(commentId));
+      await _servicoComments.editarComentario(commentId.toString(), newContent);
+      setState(() {
+        final index = newsComments
+            .indexWhere((comment) => comment['idComment'] == commentId);
+        if (index != -1) {
+          newsComments[index]['content'] = newContent;
+        }
+      });
+      print('Comentário editado.');
+    } catch (e) {
+      print('Erro ao editar comentário: $e');
+    }
+  }
+
+  Future<void> _deleteComment(int commentId) async {
+    final userId =
+        Provider.of<LoginState>(context, listen: false).currentUser?.uid;
+    if (userId == null) {
+      print('Usuário não autenticado.');
+      return;
+    }
+
+    try {
+      await _servicoComments.removerComentario(commentId.toString());
       setState(() {
         newsComments
             .removeWhere((comment) => comment['idComment'] == commentId);
@@ -158,7 +181,7 @@ class CommentFieldState extends State<CommentField> {
                     trailing: Provider.of<LoginState>(context)
                                 .currentUser
                                 ?.uid ==
-                            comment['idUser']
+                            comment['uid']
                         ? Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -166,8 +189,8 @@ class CommentFieldState extends State<CommentField> {
                                 icon: const Icon(Icons.edit),
                                 onPressed: () async {
                                   final String text = comment['content'] ?? '';
-                                  final String commentId =
-                                      comment['idComment'] ?? '';
+                                  final int commentId =
+                                      comment['idComment'] ?? 0;
                                   final TextEditingController editController =
                                       TextEditingController(text: text);
 

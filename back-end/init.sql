@@ -10,14 +10,15 @@ CREATE DATABASE IF NOT EXISTS pecuaria_news_db
 USE pecuaria_news_db;
 
 CREATE TABLE IF NOT EXISTS users (
-    idUser INT PRIMARY KEY,
+    idUser INT AUTO_INCREMENT PRIMARY KEY,
+    uid VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     displayName VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     email VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     photoUrl VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 );
 
 CREATE TABLE IF NOT EXISTS news (
-    idNews INT PRIMARY KEY,
+    idNews INT AUTO_INCREMENT PRIMARY KEY,
     imageAssetPath VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     category VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     author VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -28,7 +29,7 @@ CREATE TABLE IF NOT EXISTS news (
 );
 
 CREATE TABLE IF NOT EXISTS comments (
-    idComment INT PRIMARY KEY,
+    idComment INT AUTO_INCREMENT PRIMARY KEY,
     idNews INT NOT NULL,
     idUser INT NOT NULL,
     commenter VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -39,10 +40,10 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (idUser) REFERENCES users(idUser)
 );
 
-INSERT INTO users (idUser, displayName, email, photoUrl) VALUES 
-(1, 'Breno', 'breno@example.com', 'author_1.jpeg'),
-(2, 'Maria', 'maria@example.com', 'author_1.jpeg'),
-(3, 'João', 'joao@example.com', 'author_1.jpeg');
+INSERT INTO users (idUser, uid, displayName, email, photoUrl) VALUES 
+(1, "undhu", 'Breno', 'breno@example.com', 'author_1.jpeg'),
+(2, "undhw", 'Maria', 'maria@example.com', 'author_1.jpeg'),
+(3, "undhe", 'João', 'joao@example.com', 'author_1.jpeg');
 
 INSERT INTO news (idNews, imageAssetPath, category, author, authorImageAssetPath, date, title, content) VALUES 
 (1, 'news_1.jpeg', 'Tecnologia', 'Breno', 'author_1.jpeg', '2024-03-24', '4 tecnologias de pecuária de precisão', 'A pecuária de precisão é um conceito que evolui rapidamente entre pecuaristas. Ela utiliza muitas tecnologias que monitoram os animais 24 horas por dia e ajudam o produtor a tomar decisões a partir da interpretação correta de uma quantidade massiva de dados coletados. Com base nisso, Alberto Bernardi explica que a pecuária de precisão nada mais é do que um conjunto de ferramentas adotadas pelo pecuarista para tornar a produção agropecuária mais eficiente. “Essas ferramentas possibilitam ao pecuarista identificar, rastrear e medir os indicadores produtivos, comportamentais e fisiológicos para melhorar a produtividade e bem-estar dos animais”, explica Bernardi. Segundo o pesquisador da Embrapa Pecuária Sudeste, as tecnologias de pecuária de precisão incluem sistemas automatizados de identificação animal, pesagem, consumo de alimentos e água, comportamento alimentar, frequência cardiorrespiratória, temperatura corporal, atividade e posição dos animais, ordenha, entre outros.');
