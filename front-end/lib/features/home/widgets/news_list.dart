@@ -43,11 +43,6 @@ class _NewsListState extends State<NewsList> {
     if (mounted) setState(() {});
   }
 
-  Future<Map<String, dynamic>> _fetchNewsData() async {
-    final jsonString = await rootBundle.loadString('assets/json/news.json');
-    return json.decode(jsonString);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SliverList(

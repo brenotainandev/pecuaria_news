@@ -3,14 +3,14 @@ import 'dart:convert';
 
 import "package:http/http.dart" as http;
 
-final URL_SERVICOS = Uri.parse("http://192.168.0.11");
+final URL_SERVICOS = Uri.parse("http://172.17.0.1");
 
 final URL_NEWS = "${URL_SERVICOS.toString()}:5001/news";
 
 final URL_ARQUIVOS = "${URL_SERVICOS.toString()}:5005";
 
 class ServicoNews {
-  static const String URL_NEWS = "http://192.168.0.11:5001/news";
+  static const String URL_NEWS = "http://172.17.0.1:5001/news";
 
   Future<List<dynamic>> getNews(int ultimoFeed, int tamanhoPagina) async {
     final resposta =
@@ -35,7 +35,7 @@ class ServicoNews {
 }
 
 class ServicoComments {
-  static const String URL_COMMENTS = "http://192.168.0.11:5002/comments";
+  static const String URL_COMMENTS = "http://172.17.0.1:5002/comments";
 
   Future<List<dynamic>> getAllComments(int idNews) async {
     final resposta = await http.get(Uri.parse("$URL_COMMENTS/$idNews"));
