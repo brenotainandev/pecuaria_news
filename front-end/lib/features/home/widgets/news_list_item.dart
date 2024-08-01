@@ -4,7 +4,7 @@ import 'package:pecuaria_news/features/home/pages/singe_news_item_page.dart';
 import 'package:pecuaria_news/theme/app_colors.dart';
 
 class NewsListItem extends StatelessWidget {
-  final String idNews;
+  final int idNews;
   final String title;
   final String content;
   final String author;
@@ -52,7 +52,7 @@ class NewsListItem extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
+              child: Image.network(
                 imageAssetPath,
                 width: 150,
                 height: 150,
@@ -85,7 +85,7 @@ class NewsListItem extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage(
+                        backgroundImage: NetworkImage(
                           authorImageAssetPath,
                         ),
                         radius: 15,

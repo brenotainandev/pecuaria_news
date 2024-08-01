@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  news:
+    build: ./dockerfiles/python
+    image: news
+    container_name: news
+    hostname: news
+    restart: always
+    volumes:
+      - './news:/servico'
+    command: python3 /servico/news.py
+    ports:
+      - '5001:5000'
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  comments:
+    build: ./dockerfiles/python
+    image: comments
+    container_name: comments
+    hostname: comments
+    restart: always
+    volumes:
+      - './comments:/servico'
+    command: python3 /servico/comments.py
+    ports:
+      - '5002:5000'
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  database:
+    image: mysql:latest
+    container_name: database
+    hostname: database
+    restart: always
+    ports:
+      - '5004:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=pecuaria_news_db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=123456
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  files:
+    build: ./dockerfiles/nginx
+    image: nginx:latest
+    container_name: files
+    hostname: files
+    restart: always
+    volumes:
+      - './images:/usr/share/nginx/html'
+    ports:
+      - '5005:80'
